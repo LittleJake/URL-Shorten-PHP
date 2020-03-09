@@ -2,6 +2,7 @@
 namespace app\controller;
 
 use app\BaseController;
+use think\facade\View;
 
 class Index extends BaseController
 {
@@ -12,6 +13,8 @@ class Index extends BaseController
 
     public function hello($name = 'ThinkPHP6')
     {
+        View::assign('a',1);
+        return View::fetch();
         return 'hello,' . $name;
     }
 }
