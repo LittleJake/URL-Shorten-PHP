@@ -4,8 +4,11 @@ declare (strict_types = 1);
 namespace app;
 
 use think\App;
+use think\Container;
 use think\exception\ValidateException;
 use think\Validate;
+use think\exception\HttpResponseException;
+use think\Response;
 
 /**
  * 控制器基础类
@@ -90,5 +93,64 @@ abstract class BaseController
 
         return $v->failException(true)->check($data);
     }
+    /**
+     * 操作成功跳转的快捷方法
+     * @access protected
+     * @param mixed $msg 提示信息
+     * @param string $url 跳转的URL地址
+     * @param mixed $data 返回的数据
+     * @param integer $wait 跳转等待时间
+     * @param array $header 发送的Header信息
+     * @return void
+     */
+    protected function success($msg = '', string $url = null, $data = '', int $wait = 3, array $header = [])
+    {
+        if (is_null($url) && isset($_SERVER["HTTP_REFERER"])) {
+            $url = $_SERVER["HTTP_REFERER"];
+        } elseif ($url) {
+            $url = (strpos($url, '://') || 0 === strpos($url, '/')) ? $url : $this->app->route->buildUrl($url);
+        }
+        $result = [
+            'code' => 1,
+            'msg' => $msg,
+            'data' => $data,
+            'url' => $url,
+            'wait' => $wait,
+        ];
 
+        $type = 'view';
+
+        $response = Response::create(app()->config->get('app.dispatch_success_tmpl'), $type)->assign($result)->header($header);
+        throw new HttpResponseException($response);
+    }
+    /**
+     * 操作错误跳转的快捷方法
+     * @access protected
+     * @param mixed $msg 提示信息
+     * @param string $url 跳转的URL地址
+     * @param mixed $data 返回的数据
+     * @param integer $wait 跳转等待时间
+     * @param array $header 发送的Header信息
+     * @return void
+     */
+    protected function error($msg = '', string $url = null, $data = '', int $wait = 3, array $header = [])
+    {
+        if (is_null($url)) {
+            $url = $this->request->isAjax() ? '' : 'javascript:history.back(-1);';
+        } elseif ($url) {
+            $url = (strpos($url, '://') || 0 === strpos($url, '/')) ? $url : $this->app->route->buildUrl($url);
+        }
+        $result = [
+            'code' => 0,
+            'msg' => $msg,
+            'data' => $data,
+            'url' => $url,
+            'wait' => $wait,
+        ];
+
+        $type = 'view';
+
+        $response = Response::create(app()->config->get('app.dispatch_error_tmpl'), $type)->assign($result)->header($header);
+        throw new HttpResponseException($response);
+    }
 }

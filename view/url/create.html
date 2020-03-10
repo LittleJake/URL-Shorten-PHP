@@ -1,0 +1,10 @@
+{extend name="default/base" /}
+{block name="content"}
+<form action="save" method="post">
+    <div>
+        <label>URL</label>
+        <input type="url" name="url" maxlength="255">
+    </div>
+    <input type="submit" value="提交">
+</form>
+{/block}

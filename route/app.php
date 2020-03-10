@@ -14,4 +14,8 @@ Route::get('think', function () {
     return 'hello,ThinkPHP6!';
 });
 
-Route::get('hello/:name', 'index/hello');
+
+Route::get('url/create', 'url/create');
+Route::get('url/read/:route', 'url/read');
+
+Route::get(':route', 'url/redirect');
