@@ -1,6 +1,37 @@
 {extend name="default/base" /}
 {block name="content"}
-<div>
+<div class="content">
+    <div class="main bg-dark">
+        <div class="container p-5">
+            <div class="row">
+                <div class="col-md-7 col-sm-12 text-white">
+                    <h1>URL缩短</h1>
+                    <br>
+                    <ul class="list-unstyled">
+                        <li>化繁为简，将繁长的网址优化至短小精悍。</li>
+                        <li>集成URL安全检测系统，拒绝高危网址。</li>
+                    </ul>
+                    <p>本平台只作为URL跳转使用，不储存任何违反法律法规的相关信息。所有内容均由用户自行上传，任何违反法律的行为与本平台无关。</p>
+                    <p>如涉及相关问题，可联系平台做删除处理。</p>
 
+                    <br>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a href="{:url('url/create')}" class="btn btn-lg btn-light text-dark">开始使用</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="{:url('url/read')}" class="btn btn-lg btn-info text-dark">查询路由</a>
+                        </li>
+                    </ul>
+
+                </div>
+                <div class="col-md-5 d-none d-md-block">
+                    <div class="p-sm-3 p-md-5 text-center">
+                        <img src="logo.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {/block}
