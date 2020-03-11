@@ -10,15 +10,6 @@ use think\facade\View;
 
 class Url extends BaseController
 {
-    /**
-     * 显示资源列表
-     *
-     * @return \think\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * 显示创建资源表单页.
@@ -63,7 +54,12 @@ class Url extends BaseController
      */
     public function read(string $route)
     {
-        $query = \app\model\Url::where('route',$route)->find();
+        try{
+            $query = \app\model\Url::where('route',$route)->findOrFail();
+        } catch (\Exception $e){
+            $this->error($e->getMessage());
+        }
+
         return $query->url;
     }
 
@@ -89,6 +85,6 @@ class Url extends BaseController
             $this->error('未找到对应路由，'.$e->getMessage(),'/');
         }
 
-        return redirect($query['url'],301);
+        return redirect($query->url,301);
     }
 }
