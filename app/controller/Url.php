@@ -47,20 +47,31 @@ class Url extends BaseController
     }
 
     /**
+     *
      * 显示指定的资源
      *
-     * @param  string  $route
-     * @return \think\Response
+     * @author LittleJake
+     * @param string $route
+     * @return string
+     * @throws \Exception
      */
-    public function read(string $route)
+
+    public function read(string $route = '')
     {
-        try{
-            $query = \app\model\Url::where('route',$route)->findOrFail();
-        } catch (\Exception $e){
-            $this->error($e->getMessage());
+        if(!empty($route)){
+            try{
+                $query = Db::name('url')->where('route',$route)->findOrFail();
+            } catch (\Exception $e){
+                $this->error("查询的代码不存在");
+            }
+
+            return $query->url;
         }
 
-        return $query->url;
+        $vars = [
+            'page_title' => '查询'
+        ];
+        return View::fetch('',$vars);
     }
 
     /**
