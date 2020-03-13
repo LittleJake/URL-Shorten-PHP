@@ -65,7 +65,7 @@ class Url extends BaseController
                 $this->error("查询的代码不存在");
             }
 
-            return $query->url;
+            return $query['url'];
         }
 
         $vars = [
@@ -96,6 +96,6 @@ class Url extends BaseController
             $this->error('未找到对应路由，'.$e->getMessage(),'/');
         }
 
-        return redirect($query->url,301);
+        return redirect($query['url'],301);
     }
 }

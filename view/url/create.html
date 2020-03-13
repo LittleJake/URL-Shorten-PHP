@@ -1,10 +1,53 @@
 {extend name="default/base" /}
 {block name="content"}
-<form action="save" method="post">
-    <div>
-        <label>URL</label>
-        <input type="url" name="url" maxlength="255">
+<div class="content">
+    <div class="bg-dark">
+        <div class="container p-5">
+            <div class="row">
+                <div class="col-md-7 col-sm-12 text-white">
+                    <h1>URL缩短</h1>
+                    <br>
+                    <p>本页面可缩短长地址为短地址。</p>
+                    <form action="save.html" method="post">
+                        <div class="form-group">
+                            <label for="url">URL</label>
+                            <input class="form-control" type="url" name="url" id="url" maxlength="255">
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="提交">
+                    </form>
+                </div>
+                <div class="col-md-5 d-none d-md-block">
+                    <div class="p-sm-3 p-md-5 text-center">
+                        <img src="/logo.png">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <input type="submit" value="提交">
-</form>
+    <div class="container p-5">
+        <div class="row text-center">
+            <div class="col-md-4">
+                <img width="50%" src="/static/img/safe.png">
+                <div class="p-5">
+                    <h3>网址安全监测</h3>
+                    <p>对接主流网址安全监测接口，防止不法分子利用。</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <img width="50%" src="/static/img/lua.png">
+                <div class="p-5">
+                    <h3>Lua 中间件</h3>
+                    <p>缓存内路由网址无需经过，业务层直接使用Lua脚本访问Redis返回。</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <img width="50%" src="/static/img/database.png">
+                <div class="p-5">
+                    <h3>Redis 数据库</h3>
+                    <p>基于KV的内存缓存数据库，提高并发的吞吐率。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {/block}
