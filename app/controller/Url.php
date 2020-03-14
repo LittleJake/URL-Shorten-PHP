@@ -32,18 +32,7 @@ class Url extends BaseController
      */
     public function save(Request $request)
     {
-        $data = $request->post();
-        $valid = new \app\validate\Url();
-        if(!$valid->check($data))
-            $this->error($valid->getError());
 
-        $route = getRandStr(8);
-        \app\model\Url::create([
-            'url' => $data['url'],
-            'route' => $route,
-            'update_time' => time(),
-        ]);
-        $this->success('添加成功', (string)url('url/read', ['route'=> $route]));
     }
 
     /**
@@ -96,6 +85,6 @@ class Url extends BaseController
             $this->error('未找到对应路由，'.$e->getMessage(),'/');
         }
 
-        return redirect($query['url'],301);
+        $this -> success("正在跳转至$query[url]", $query['url'],null,5);
     }
 }

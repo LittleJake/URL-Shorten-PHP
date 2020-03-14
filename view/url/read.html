@@ -8,7 +8,7 @@
                     <h1>URL缩短</h1>
                     <br>
                     <p>本页面可查询路由缩写对应长地址。</p>
-                    <form action="read.html" method="get">
+                    <form action="{:url('api/read')}" method="get">
                         <div class="form-group">
                             <label for="route">路由缩写</label>
                             <input class="form-control" type="text" id="route" name="route" maxlength="8">

@@ -3,6 +3,7 @@ declare (strict_types = 1);
 
 namespace app\controller;
 
+use app\middleware\CheckFrequent;
 use think\Request;
 use app\BaseController;
 use app\model\Url;
@@ -10,6 +11,8 @@ use think\response\Json;
 
 class Api extends BaseController
 {
+
+    protected $middleware = [CheckFrequent::class];
     /**
      * 显示资源列表
      *
@@ -42,7 +45,24 @@ class Api extends BaseController
      */
     public function save(Request $request)
     {
-        //
+        try{
+            $data = $request->post();
+            $valid = new \app\validate\Url();
+            if(!$valid->check($data))
+                $this->error($valid->getError());
+
+            $route = getRandStr(8);
+
+            Url::create([
+                'url' => $data['url'],
+                'route' => $route,
+                'update_time' => time(),
+            ]);
+
+            return json(['code' => 1, 'msg' => 'OK', 'data' => $request->host().'/'.$route]);
+        } catch (\Exception $e){
+            return json(['code' => 0, 'msg' => 'Failed']);
+        }
     }
 
     /**
@@ -53,7 +73,26 @@ class Api extends BaseController
      */
     public function get($id) : Json
     {
-        return json(['code' => 1, 'msg' => 'OK', 'data' => Url::where('id', $id) -> find()]);
+        try{
+            return json(['code' => 1, 'msg' => 'OK', 'data' => Url::where('id', $id) -> findOrFail()]);
+        } catch (\Exception $e){
+            return json(['code' => 0, 'msg' => 'Failed']);
+        }
+    }
+
+    /**
+     * 显示指定的资源
+     *
+     * @param  string  $route
+     * @return \think\Response
+     */
+    public function read($route) : Json
+    {
+        try{
+            return json(['code' => 1, 'msg' => 'OK', 'data' => Url::where('route', $route) -> findOrFail()]);
+        } catch (\Exception $e){
+            return json(['code' => 0, 'msg' => 'Failed']);
+        }
     }
 
     /**
