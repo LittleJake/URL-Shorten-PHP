@@ -14,10 +14,4 @@ class Index extends BaseController
         return View::fetch('',$vars);
     }
 
-    public function hello($name = 'ThinkPHP6')
-    {
-        View::assign('a',1);
-        return View::fetch();
-        return 'hello,' . $name;
-    }
 }

@@ -8,13 +8,14 @@
                     <h1>URL缩短</h1>
                     <br>
                     <p>本页面可缩短长地址为短地址。</p>
-                    <form action="{:url('api/save')}" method="post">
+                    <div id="alert"></div>
+                    <div id="form">
                         <div class="form-group">
                             <label for="url">URL</label>
                             <input class="form-control" type="url" name="url" id="url" maxlength="255">
                         </div>
-                        <input class="btn btn-primary" type="submit" value="提交">
-                    </form>
+                        <input class="btn btn-primary" type="submit" value="提交" onclick="submit()">
+                    </div>
                 </div>
                 <div class="col-md-5 d-none d-md-block">
                     <div class="p-sm-3 p-md-5 text-center">
@@ -50,4 +51,26 @@
         </div>
     </div>
 </div>
+{/block}
+{block name="js"}
+<script>
+    function submit(){
+        $.ajax({
+            url: "{:url('api/save')}",
+            data: { url: $('#url').val() },
+            method: 'post',
+            success: function(res){
+                if(res.code == 1){
+                    $('#alert').html("<div class='alert alert-success' role='alert'>" +
+                        "缩短后网址为：" + res.data.url +
+                        "</div>");
+                } else {
+                    $('#alert').html("<div class='alert alert-danger' role='alert'>" +
+                         res.msg
+                        + "</div>");
+                }
+            }
+        });
+    }
+</script>
 {/block}

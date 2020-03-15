@@ -4,6 +4,7 @@ declare (strict_types = 1);
 namespace app\controller;
 
 use app\middleware\CheckFrequent;
+use think\Exception;
 use think\Request;
 use app\BaseController;
 use app\model\Url;
@@ -49,7 +50,7 @@ class Api extends BaseController
             $data = $request->post();
             $valid = new \app\validate\Url();
             if(!$valid->check($data))
-                $this->error($valid->getError());
+                throw new \Exception($valid->getError());
 
             $route = getRandStr(8);
 
@@ -59,9 +60,9 @@ class Api extends BaseController
                 'update_time' => time(),
             ]);
 
-            return json(['code' => 1, 'msg' => 'OK', 'data' => $request->host().'/'.$route]);
+            return json(['code' => 1, 'msg' => 'OK', 'data' => ['url' => $request->host().'/'.$route]]);
         } catch (\Exception $e){
-            return json(['code' => 0, 'msg' => 'Failed']);
+            return json(['code' => 0, 'msg' => $e->getMessage()]);
         }
     }
 

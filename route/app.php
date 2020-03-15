@@ -17,7 +17,7 @@ Route::get('think', function () {
 Route::get('url/create', 'url/create');
 Route::get('url/read', 'url/read');
 Route::get('url/read/:route', 'url/read');
-Route::get('api/read/:route', 'api/read');
+Route::get('api/read', 'api/read');
 Route::post('api/save', 'api/save');
 
 

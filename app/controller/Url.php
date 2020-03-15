@@ -85,6 +85,6 @@ class Url extends BaseController
             $this->error('未找到对应路由，'.$e->getMessage(),'/');
         }
 
-        $this -> success("正在跳转至$query[url]", $query['url'],null,5);
+        $this -> success("正在跳转至 $query[url]", $query['url'],null,5);
     }
 }

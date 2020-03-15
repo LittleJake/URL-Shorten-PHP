@@ -14,7 +14,7 @@ class Url extends Validate
      * @var array
      */	
 	protected $rule = [
-	    'url' => ['require','unique:url']
+	    'url' => ['require','unique:url','url']
     ];
     
     /**
