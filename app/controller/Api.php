@@ -5,9 +5,10 @@ namespace app\controller;
 
 use app\middleware\CheckFrequent;
 use think\Exception;
+use think\facade\Log;
 use think\Request;
 use app\BaseController;
-use app\model\Url;
+use app\lib\URL;
 use think\response\Json;
 
 class Api extends BaseController
@@ -48,21 +49,15 @@ class Api extends BaseController
     {
         try{
             $data = $request->post();
-            $valid = new \app\validate\Url();
+            $valid = validate('Url');
             if(!$valid->check($data))
                 throw new \Exception($valid->getError());
 
-            $route = getRandStr(8);
-
-            Url::create([
-                'url' => $data['url'],
-                'route' => $route,
-                'update_time' => time(),
-            ]);
-
+            $route = URL::set($data['url']);
             return json(['code' => 1, 'msg' => 'OK', 'data' => ['url' => $request->host().'/'.$route]]);
         } catch (\Exception $e){
-            return json(['code' => 0, 'msg' => $e->getMessage()]);
+            Log::error($e ->getMessage());
+            return json(['code' => 0, 'msg' => 'failed']);
         }
     }
 
@@ -75,9 +70,10 @@ class Api extends BaseController
     public function get($id) : Json
     {
         try{
-            return json(['code' => 1, 'msg' => 'OK', 'data' => Url::where('id', $id) -> findOrFail()]);
+            return json(['code' => 1, 'msg' => 'OK', 'data' => URL::get($id)]);
         } catch (\Exception $e){
-            return json(['code' => 0, 'msg' => 'Failed']);
+            Log::error($e ->getMessage());
+            return json(['code' => 0, 'msg' => 'failed']);
         }
     }
 
@@ -90,9 +86,10 @@ class Api extends BaseController
     public function read($route) : Json
     {
         try{
-            return json(['code' => 1, 'msg' => 'OK', 'data' => Url::where('route', $route) -> findOrFail()]);
+            return json(['code' => 1, 'msg' => 'OK', 'data' => URL::read($route)]);
         } catch (\Exception $e){
-            return json(['code' => 0, 'msg' => 'Failed']);
+            Log::error($e ->getMessage());
+            return json(['code' => 0, 'msg' => 'failed']);
         }
     }
 
