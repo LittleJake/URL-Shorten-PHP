@@ -25,27 +25,7 @@ class Api extends BaseController
         //
     }
 
-    /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
-     */
-    public function create(Request $request)
-    {
-        //
-        $data = $request->post();
-        $valid = validate('');
-        $data = [];
-        return json(['code' => 1,'mgs' => 'OK', 'data' => Url::create($data)]);
-    }
-
-    /**
-     * 保存新建的资源
-     *
-     * @param  \think\Request  $request
-     * @return \think\Response
-     */
-    public function save(Request $request)
+    public function save(Request $request) : Json
     {
         try{
             $data = $request->post();
@@ -54,76 +34,40 @@ class Api extends BaseController
                 throw new \Exception($valid->getError());
 
             $route = URL::set($data['url']);
-            return json(['code' => 1, 'msg' => 'OK', 'data' => ['url' => $request->host().'/'.$route]]);
+            return json(['code' => 1, 'msg' => 'OK', 'data' => $request->host().'/'.$route]);
         } catch (\Exception $e){
             Log::error($e ->getMessage());
             return json(['code' => 0, 'msg' => 'failed']);
         }
     }
 
-    /**
-     * 显示指定的资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
     public function get($id) : Json
     {
         try{
-            return json(['code' => 1, 'msg' => 'OK', 'data' => URL::get($id)]);
+            return json(['code' => 1, 'msg' => 'OK', 'data' => URL::get('id', $id)]);
         } catch (\Exception $e){
             Log::error($e ->getMessage());
             return json(['code' => 0, 'msg' => 'failed']);
         }
     }
 
-    /**
-     * 显示指定的资源
-     *
-     * @param  string  $route
-     * @return \think\Response
-     */
     public function read($route) : Json
     {
         try{
-            return json(['code' => 1, 'msg' => 'OK', 'data' => URL::read($route)]);
+            return json(['code' => 1, 'msg' => 'OK', 'data' => URL::get('route', $route)]);
         } catch (\Exception $e){
             Log::error($e ->getMessage());
             return json(['code' => 0, 'msg' => 'failed']);
         }
     }
 
-    /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * 保存更新的资源
-     *
-     * @param  \think\Request  $request
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * 删除指定资源
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
     public function delete($id) : Json
     {
-        return json(['code' => 1, 'msg' => 'OK', 'data' => Url::where('id', $id) -> delete()]);
+        return json(['code' => 1, 'msg' => 'OK', 'data' => URL::del($id)]);
+    }
+
+    public function remove($route) : Json
+    {
+        return json(['code' => 1, 'msg' => 'OK', 'data' => URL::remove($route)]);
     }
 }

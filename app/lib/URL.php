@@ -8,35 +8,30 @@ use think\facade\Cache;
 
 class URL
 {
-    public static function get($id): string
+    public static function get($type, $value): string
     {
-        if(Cache::has("URL:id:$id"))
-            $url = Cache::get("URL:id:$id");
+        if(Cache::has("URL:$type:$value"))
+            $url = Cache::get("URL:$type:$value");
         else
-            $url = U::where('id', $id)-> findOrFail();
+            $url = U::where($type, $value)-> findOrFail();
 
-        Cache::set("URL:id:$id", $url,3600);
-        return $url;
-    }
-
-    public static function read($route): string
-    {
-        if(Cache::has("URL:route:$route"))
-            $url = Cache::get("URL:route:$route");
-        else
-            $url = U::where('route', $route)-> findOrFail();
-
-        Cache::set("URL:route:$route", $url,3600);
+        Cache::set("URL:$type:$type", $value,3600);
         return $url;
     }
 
     public static function set($url) {
         $route = getRandStr(8);
-        U::create([
-            'url' => $url,
-            'route' => $route,
-            'update_time' => time(),
-        ]);
+        U::create(['url' => $url, 'route' => $route, 'update_time' => time(),]);
         return $route;
+    }
+
+    public static function del($id){
+        Cache::delete("URL:id:$id");
+        return U::where('id', $id) -> delete();
+    }
+
+    public static function remove($route){
+        Cache::delete("URL:route:$route");
+        return U::where('route', $route) -> delete();
     }
 }
