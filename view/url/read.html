@@ -33,6 +33,17 @@
 {/block}
 {block name="js"}
 <script>
+    function copy() {
+        var text =document.getElementById("short-url").innerText;
+        var input = document.createElement('input');
+        input.setAttribute('id', 'copyInput');
+        input.setAttribute('value', text);
+        document.getElementsByTagName('body')[0].appendChild(input);
+        document.getElementById('copyInput').select();
+        if (document.execCommand('copy'))
+            alert('复制成功');
+        document.getElementById('copyInput').remove();
+    }
     function read(){
         $.ajax({
             url: "{:url('api/read')}",
@@ -41,8 +52,8 @@
             success: function(res){
                 if(res.code == 1){
                     $('#alert').html("<div class='alert alert-success' role='alert'>" +
-                        "缩短后网址为：" + res.data.url +
-                        "</div>");
+                        "缩短后网址为：<span id='short-url'>"+res.data.url +
+                    "</span> <a onclick='copy()' href='javascript:void(0);'>复制</a></div>");
                 } else {
                     $('#alert').html("<div class='alert alert-danger' role='alert'>" +
                         res.msg

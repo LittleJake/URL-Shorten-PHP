@@ -32,6 +32,18 @@
 {/block}
 {block name="js"}
 <script>
+    function copy() {
+        var text =document.getElementById("short-url").innerText;
+        var input = document.createElement('input');
+        input.setAttribute('id', 'copyInput');
+        input.setAttribute('value', text);
+        document.getElementsByTagName('body')[0].appendChild(input);
+        document.getElementById('copyInput').select();
+        if (document.execCommand('copy'))
+            alert('复制成功');
+        document.getElementById('copyInput').remove()
+    }
+
     function submit(){
         $.ajax({
             url: "{:url('api/save')}",
@@ -40,8 +52,20 @@
             success: function(res){
                 if(res.code == 1){
                     $('#alert').html("<div class='alert alert-success' role='alert'>" +
-                        "缩短后网址为：" + res.data.url +
-                        "</div>");
+                        "缩短后网址为：<span id='short-url'>"+res.data.url +
+                        "</span> <a onclick='copy()' href='javascript:void(0);'>复制</a></div>");
+                    if(res.data.safe){
+                        $('#alert').append("<div class='alert alert-info' role='alert'>" +
+                            "<ul>" +
+                            "<li>漏洞查询："+res.data.safe.vulnerability+"</li>" +
+                            "<li>虚假网站："+res.data.safe.fake+"</li>" +
+                            "<li>木马网站："+res.data.safe.trojan+"</li>" +
+                            "<li>地址跳转："+res.data.safe.rewrite+"</li>" +
+                            "<li>谷歌查询："+res.data.safe.google+"</li>" +
+                            "<li>微信查询："+res.data.safe.wechat+"</li>" +
+                            "</ul>" +
+                            "</div>");
+                    }
                 } else {
                     $('#alert').html("<div class='alert alert-danger' role='alert'>" +
                          res.msg

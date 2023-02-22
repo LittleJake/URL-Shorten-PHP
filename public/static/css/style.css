@@ -2,13 +2,9 @@
     min-height: calc(100vh - 270px);
 }
 
-footer {
-    background: #f2d2ff;
-}
-
 footer a,
 footer a:hover{
-    color: #000;
+    color: #fff;
 }
 
 .main {

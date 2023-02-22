@@ -18,9 +18,7 @@ class Url extends BaseController
      */
     public function create(): string
     {
-        $vars = [
-            'page_title' => '创建'
-        ];
+        $vars = ['page_title' => '创建'];
         return View::fetch('',$vars);
     }
 
@@ -45,21 +43,9 @@ class Url extends BaseController
      * @throws \Exception
      */
 
-    public function read(string $route = '')
+    public function read()
     {
-        if(!empty($route)){
-            try{
-                $query = Db::name('url')->where('route',$route)->findOrFail();
-            } catch (\Exception $e){
-                $this->error("查询的代码不存在");
-            }
-
-            return $query['url'];
-        }
-
-        $vars = [
-            'page_title' => '查询'
-        ];
+        $vars = ['page_title' => '查询'];
         return View::fetch('',$vars);
     }
 
@@ -79,7 +65,7 @@ class Url extends BaseController
 
     public function redirect(string $route){
         try{
-            $query = Db::name('url') -> where('route', $route)->cache(true,600)->findOrFail();
+            $query = Db::name('url') -> where('route', $route)->cache(true,7200)->findOrFail();
             Db::name('url') -> where('route', $route)->inc('times', 1)->update();
         } catch(\Exception $e) {
             $this->error('未找到对应路由，'.$e->getMessage(),'/');
